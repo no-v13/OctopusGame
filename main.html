@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>오징어 게임 서바이벌 전광판 - MAIN SERVER BOARD</title>
+  <title>Octopus Game Survival - Main Server Scoreboard</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,11 +12,11 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
   
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   
   <style>
     body {
-      font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+      font-family: 'Outfit', sans-serif;
       background-color: #030303;
       color: #ffffff;
       overflow-x: hidden;
@@ -42,7 +42,6 @@
       box-shadow: 0 0 12px rgba(234, 179, 8, 0.3), inset 0 0 6px rgba(234, 179, 8, 0.1);
       border-color: rgba(234, 179, 8, 0.7);
     }
-    /* 3D 네온 버튼 스타일 */
     .neon-btn-red {
       box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
       background: linear-gradient(135deg, #7f1d1d, #ef4444);
@@ -51,7 +50,7 @@
       box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
       background: linear-gradient(135deg, #1e3a8a, #3b82f6);
     }
-    /* 스크롤바 커스텀 */
+    /* Scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
     }
@@ -62,7 +61,6 @@
       background: #ff007f;
       border-radius: 4px;
     }
-    /* 빔프로젝터용 대형 알림창 */
     #ejection-warning {
       animation: warning-flash 1s infinite alternate;
     }
@@ -74,11 +72,11 @@
 </head>
 <body class="p-6 relative select-none">
 
-  <!-- 뒷배경 사이버 그리드 등 데코레이션 -->
+  <!-- Ambient BG Grid -->
   <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,0,127,0.03)_0%,transparent_85%)] pointer-events-none"></div>
   <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-500 via-purple-600 to-cyan-500 opacity-60"></div>
 
-  <!-- HEADER BRANDING RAIL -->
+  <!-- HEADER HEADER BRANDING -->
   <header class="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-md p-5 rounded-2xl mb-6 relative z-10 shadow-lg">
     <div class="flex items-center gap-4">
       <div class="flex gap-2">
@@ -88,17 +86,17 @@
       </div>
       <div>
         <h1 class="text-3xl font-black tracking-wider text-white flex items-center gap-2">
-          SURVIVAL CEILING <span class="text-[#FF007F] neon-text-pink">BOARD</span>
+          OCTOPUS CEILING <span class="text-[#FF007F] neon-text-pink">BOARD</span>
         </h1>
-        <p class="text-[10px] text-zinc-400 font-mono tracking-widest uppercase">REAL-TIME BEAM PROJECT PROTOCOL DIGITAL BOARD</p>
+        <p class="text-[10px] text-zinc-400 font-mono tracking-widest uppercase font-bold">REAL-TIME SURVIVORS MONITOR SYSTEM BILLBOARD</p>
       </div>
     </div>
 
-    <!-- MAIN STATE / ROUND PANEL (LARGE FOR BEAM VIEW) -->
+    <!-- MAIN STATE / ROUNDS PANEL -->
     <div class="flex items-center gap-5 bg-black/60 px-6 py-3 rounded-2xl border border-zinc-800 shadow-inner">
       <div class="text-right">
         <div class="text-[9px] text-zinc-500 font-mono tracking-widest uppercase">ROUND STAGE</div>
-        <div id="round-state-text" class="text-xl font-black text-[#00FFFF] neon-text-cyan">대기실 진입 단계</div>
+        <div id="round-state-text" class="text-xl font-black text-[#00FFFF] neon-text-cyan">Standby Lobby</div>
       </div>
       <div class="w-px h-10 bg-zinc-850"></div>
       <div class="text-right">
@@ -107,38 +105,37 @@
       </div>
       <div class="w-px h-10 bg-zinc-850" id="header-timer-divider" style="display:none;"></div>
       <div class="text-right" id="header-timer-box" style="display:none;">
-        <div class="text-[9px] text-zinc-500 font-mono tracking-widest uppercase">REMAINING</div>
+        <div class="text-[9px] text-zinc-500 font-mono tracking-widest uppercase">COUNTDOWN</div>
         <div id="countdown-timer" class="text-2xl font-mono font-black text-[#00FF55] neon-text-green">00:30</div>
       </div>
     </div>
   </header>
 
-  <!-- MAIN VIEW CONTAINER -->
-  <main class="grid grid-cols-1 lg:grid-cols-4 gap-6 relative z-10">
+  <!-- MAIN VIEW CORES -->
+  <main class="grid grid-cols-1 lg:grid-cols-4 gap-6 relative z-10 animate-fade-in">
     
-    <!-- LEFT BAR / SPEAKER SYSTEM / PRESENTATION DECK -->
+    <!-- LEFT PRESENTATION & GUIDELINES -->
     <section class="lg:col-span-1 space-y-6">
       
-      <!-- PRESENTER CONTROLLER -->
+      <!-- PRESENTER CONTROL STATION -->
       <div class="rounded-3xl border-2 border-pink-500 bg-zinc-950 p-5 shadow-2xl relative overflow-hidden neon-border-pink">
         <div class="absolute top-0 left-0 right-0 h-1 bg-pink-500"></div>
         <h3 class="text-xs font-bold tracking-widest text-[#FF007F] uppercase neon-text-pink mb-4 flex items-center gap-1.5 font-mono">
-          👑 PRESENTATION CONTROLLER
+          👑 SYSTEM OPERATOR STATION
         </h3>
 
-        <!-- START / READY MANUAL ACTS -->
+        <!-- START / READY -->
         <div class="space-y-4">
-          <!-- Standby 완료 버튼 -->
-          <div id="lobby-ready-container" class="p-1 rounded-2xl bg-gradient-to-r from-pink-600/20 to-purple-600/20 border border-pink-500/25 animate-pulse">
+          <div id="lobby-ready-container" class="p-1 rounded-2xl bg-gradient-to-r from-pink-600/20 to-purple-600/20 border border-pink-500/25">
             <button onclick="commitReadyLobby()" class="w-full py-4 px-4 rounded-xl font-black text-xs uppercase bg-pink-600 hover:bg-pink-500 text-white transition-all shadow-[0_0_15px_rgba(255,0,127,0.3)] cursor-pointer">
-              ✅ 참가자 가입 완료 (GAME START)
+              ✅ LOCK IN & START GAME
             </button>
           </div>
 
-          <!-- Active Game Phase Actions -->
+          <!-- Active Game Step overrides -->
           <div id="active-game-elements" style="display:none;" class="space-y-3.5">
             <button onclick="startDiscussionTimer30()" class="w-full py-4 px-4 font-black text-xs bg-emerald-600 hover:bg-emerald-500 rounded-xl border border-emerald-400 text-white transition-all flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(16,185,129,0.3)] cursor-pointer text-center">
-              ⏱️ 30초 대화 토론 가동
+              ⏱️ START 30s STRATEGY TIMER
             </button>
 
             <button onclick="forceStepAdvance()" class="w-full py-3.5 px-4 font-bold text-xs bg-zinc-900 border border-[#00FFFF] text-[#00FFFF] hover:bg-zinc-800 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer text-center shadow-[0_0_10px_rgba(0,255,255,0.15)]">
@@ -149,176 +146,176 @@
               <span class="text-[9px] text-zinc-500 font-bold block uppercase tracking-widest">Presenter Debug Utils</span>
               <div class="grid grid-cols-2 gap-2">
                 <button onclick="simulateMissingVotes()" class="py-2 px-2 rounded-lg text-[9px] font-bold bg-blue-950/40 border border-blue-900 text-blue-400 hover:bg-blue-900/60 transition-all">
-                  🤖 투표 위탁 채우기
+                  🤖 Auto-Fill Votes
                 </button>
                 <button onclick="simulateMissingEjections()" class="py-2 px-2 rounded-lg text-[9px] font-bold bg-pink-950/40 border border-pink-900 text-pink-400 hover:bg-pink-900/60 transition-all">
-                  ⚖️ 방출 강제 지정
+                  ⚖️ Auto-Fill Exile
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- Bot & Reset Module (Presenter handy utils) -->
+          <!-- Seed & Reset Utility -->
           <div class="pt-4 border-t border-zinc-900 grid grid-cols-2 gap-2">
             <button onclick="seedPresenterBots()" class="py-3 px-3 rounded-xl text-[10px] font-bold bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-zinc-200 transition-all cursor-pointer">
-              🤖 가상 봇 15명 소집
+              🤖 SEED 15 BOTS
             </button>
             <button onclick="resetPresenterFull()" class="py-3 px-3 rounded-xl text-[10px] font-bold bg-red-950/40 border border-red-900/30 text-red-400 hover:bg-red-900/50 transition-all cursor-pointer">
-              🔄 전체 상태 초기화
+              🔄 RESET SERVER
             </button>
           </div>
         </div>
       </div>
 
-      <!-- SPEECH / DIRECT SCRIPT (큼직막하게 카드뉴스로 노출) -->
+      <!-- SPEECH / DIRECT SCENARIO NARRATIVES -->
       <div class="rounded-3xl border border-zinc-900 bg-zinc-950 p-5 shadow-lg max-h-[460px] overflow-y-auto">
         <h3 class="text-xs font-bold tracking-widest text-[#00FFFF] uppercase neon-text-cyan mb-3 font-mono">
-          📌 STAGE SCRIPT DECK (지휘 정황 가이드)
+          📌 TRANSMISSION SCRIPT GUIDE
         </h3>
         <div id="script-container" class="space-y-4">
-          <!-- Dynamic high priority card-news script injects -->
+          <!-- Dynamic high priority scripts inject -->
         </div>
       </div>
     </section>
 
-    <!-- RIGHT 3-PANELS CO-WORKING STAGES -->
+    <!-- RIGHT SECTION PANELS -->
     <section class="lg:col-span-3 space-y-6">
       
-      <!-- GIANT NOTIFICATION BROADCAST BANNER (방출 심사 시 대형 노출) -->
+      <!-- EXILE UNDERWAY WARNING BANNER -->
       <div id="ejection-warning" style="display:none;" class="p-5 rounded-2xl bg-gradient-to-r from-[#FF007F]/20 via-black to-[#FF007F]/20 border-3 border-[#FF007F] text-center relative z-20">
         <h4 class="text-2xl md:text-3xl font-black text-rose-100 uppercase tracking-widest neon-text-pink leading-snug">
-          📢 [RED] 선택 구역은 방출할 조원을 선발하십시오!
+          📢 RED CONTRACT OUTCOME: EXILE REQUIRED!
         </h4>
         <p class="text-xs text-rose-300 mt-2">
-          선택을 제출한 각 구역 팀장은 30초의 제한 시간 내에 희생 배제 대상자를 지정하십시오. 타임아웃 종료 시, 통제 시스템이 자동적으로 마지노선을 산출하여 무작위 강제 이동을 감행합니다.
+          The representative of the RED zone must immediately choose 1 teammate to exile. Failing to submit an exile target before countdown expires results in an automated random relocation sequence!
         </p>
       </div>
 
-      <!-- CENTRAL RED & BLUE NEON SHOWCASE (VOTING STEP ONLY) -->
+      <!-- BLUE vs RED INTERACTIVE SPEC SHEET -->
       <div id="voting-step-choices" style="display:none;" class="p-6 rounded-3xl bg-zinc-950/80 border border-zinc-900 shadow-2xl">
         <div class="text-center mb-4">
           <span class="px-4 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 text-[10px] font-bold font-mono tracking-widest">
-            COOPERATOR (BLUE) VS EXCLUSION (RED) DECISION SHOWDOWN
+            COOPERATOR (BLUE) VS DEFECTOR (RED) PARADIGM SPECS
           </span>
         </div>
         <div class="grid grid-cols-2 gap-6 max-w-2xl mx-auto py-3">
           <div class="text-center space-y-4">
-            <div class="w-24 h-24 rounded-full mx-auto flex items-center justify-center neon-btn-blue text-white font-black text-4xl shadow-[0_0_30px_rgba(59,130,246,0.6)]">
+            <div class="w-20 h-20 rounded-full mx-auto flex items-center justify-center neon-btn-blue text-white font-black text-3xl shadow-[0_0_30px_rgba(59,130,246,0.6)] animate-pulse">
               🔵
             </div>
             <div class="space-y-1">
-              <h5 class="text-md font-black text-blue-400 tracking-wider">상생 협력 (BLUE)</h5>
-              <p class="text-[10px] text-zinc-500">모두가 협조하여 구역 전원의 생명을 보장하고 소속감을 고수합니다.</p>
+              <h5 class="text-md font-black text-blue-400 tracking-wider font-sans">COOPERATE (BLUE)</h5>
+              <p class="text-[10px] text-zinc-500 leading-relaxed">Preserve entire roster. Secure maximum squad score points with unified trust.</p>
             </div>
           </div>
 
           <div class="text-center space-y-4">
-            <div class="w-24 h-24 rounded-full mx-auto flex items-center justify-center neon-btn-red text-white font-black text-4xl shadow-[0_0_30px_rgba(239,68,68,0.6)] animate-pulse">
+            <div class="w-20 h-20 rounded-full mx-auto flex items-center justify-center neon-btn-red text-white font-black text-3xl shadow-[0_0_30px_rgba(239,68,68,0.6)] animate-pulse">
               🔴
             </div>
             <div class="space-y-1">
-              <h5 class="text-md font-black text-rose-400 tracking-wider">배타 대립 (RED)</h5>
-              <p class="text-[10px] text-zinc-500">낙오자 1명을 희생하여 타 구역 피난처로 강제 파견 조치시킵니다.</p>
+              <h5 class="text-md font-black text-[#FF007F] neon-text-pink tracking-wider font-sans">DEFECT (RED)</h5>
+              <p class="text-[10px] text-zinc-500 leading-relaxed">Secure partial safe passage by forcefully expelling and trading 1 team member.</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ZONE COLUMNS GRID -->
+      <!-- TEAM SCOREBOARD PANEL GRID -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        <!-- ZONE A -->
+        <!-- ZONE A CARD -->
         <div class="rounded-3xl border border-zinc-900 bg-zinc-950/60 p-5 relative min-h-[400px] shadow-lg flex flex-col justify-between" id="card-zone-A">
           <div>
             <div class="flex items-center justify-between border-b border-zinc-900 pb-3 mb-4">
               <div class="flex items-center gap-2">
                 <span class="w-3 h-3 rounded-full bg-[#00FFFF] shadow-[0_0_8px_#00ffff]"></span>
-                <span class="text-lg font-black tracking-widest text-[#00FFFF] neon-text-cyan">A 구역</span>
+                <span class="text-lg font-black tracking-widest text-[#00FFFF] neon-text-cyan">ZONE A</span>
               </div>
-              <span id="vote-badge-A" class="px-2.5 py-0.5 rounded text-[10px] font-black border border-zinc-800 text-zinc-650 bg-zinc-900 uppercase">WAITING</span>
+              <span id="vote-badge-A" class="px-2.5 py-0.5 rounded text-[10px] font-black border border-zinc-800 text-zinc-500 bg-zinc-900 uppercase">WAITING</span>
             </div>
             <div id="leader-plate-A" class="mb-4 p-2.5 text-center text-xs font-bold rounded-xl bg-teal-950/20 border border-teal-900/50 text-teal-400">
-              👑 리더: 미정
+              👑 Leader: Pending
             </div>
             <div id="list-zone-A" class="space-y-2 max-h-[300px] overflow-y-auto pr-1">
               <!-- Dynamic zone members -->
             </div>
           </div>
           <div id="eject-plate-A" class="mt-4 p-2 text-center text-[10px] hidden rounded-xl bg-red-950/30 border border-red-900/50 text-rose-400 font-bold uppercase animate-pulse">
-            💀 방출 대상: 미정
+            💀 Exile Target: Pending
           </div>
         </div>
 
-        <!-- ZONE B -->
+        <!-- ZONE B CARD -->
         <div class="rounded-3xl border border-zinc-900 bg-zinc-950/60 p-5 relative min-h-[400px] shadow-lg flex flex-col justify-between" id="card-zone-B">
           <div>
             <div class="flex items-center justify-between border-b border-zinc-900 pb-3 mb-4">
               <div class="flex items-center gap-2">
                 <span class="w-3 h-3 rounded-full bg-[#FF007F] shadow-[0_0_8px_#ff007f]"></span>
-                <span class="text-lg font-black tracking-widest text-[#FF007F] neon-text-pink">B 구역</span>
+                <span class="text-lg font-black tracking-widest text-[#FF007F] neon-text-pink">ZONE B</span>
               </div>
-              <span id="vote-badge-B" class="px-2.5 py-0.5 rounded text-[10px] font-black border border-zinc-800 text-zinc-650 bg-zinc-900 uppercase">WAITING</span>
+              <span id="vote-badge-B" class="px-2.5 py-0.5 rounded text-[10px] font-black border border-zinc-800 text-zinc-500 bg-zinc-900 uppercase">WAITING</span>
             </div>
             <div id="leader-plate-B" class="mb-4 p-2.5 text-center text-xs font-bold rounded-xl bg-pink-950/20 border border-pink-900/50 text-pink-400">
-              👑 리더: 미정
+              👑 Leader: Pending
             </div>
             <div id="list-zone-B" class="space-y-2 max-h-[300px] overflow-y-auto pr-1">
-              <!-- Dynamic zone members -->
+              <!-- Dynamic members -->
             </div>
           </div>
           <div id="eject-plate-B" class="mt-4 p-2 text-center text-[10px] hidden rounded-xl bg-red-950/30 border border-red-900/50 text-rose-400 font-bold uppercase animate-pulse">
-            💀 방출 대상: 미정
+            💀 Exile Target: Pending
           </div>
         </div>
 
-        <!-- ZONE C -->
+        <!-- ZONE C CARD -->
         <div class="rounded-3xl border border-zinc-900 bg-zinc-950/60 p-5 relative min-h-[400px] shadow-lg flex flex-col justify-between" id="card-zone-C">
           <div>
             <div class="flex items-center justify-between border-b border-zinc-900 pb-3 mb-4">
               <div class="flex items-center gap-2">
                 <span class="w-3 h-3 rounded-full bg-yellow-400 shadow-[0_0_8px_#eab308]"></span>
-                <span class="text-lg font-black tracking-widest text-yellow-450 text-yellow-400">C 구역</span>
+                <span class="text-lg font-black tracking-widest text-yellow-400">ZONE C</span>
               </div>
-              <span id="vote-badge-C" class="px-2.5 py-0.5 rounded text-[10px] font-black border border-zinc-800 text-zinc-650 bg-zinc-900 uppercase">WAITING</span>
+              <span id="vote-badge-C" class="px-2.5 py-0.5 rounded text-[10px] font-black border border-zinc-800 text-zinc-500 bg-zinc-900 uppercase">WAITING</span>
             </div>
-            <div id="leader-plate-C" class="mb-4 p-2.5 text-center text-xs font-bold rounded-xl bg-yellow-950/20 border border-yellow-900/50 text-yellow-400">
-              👑 리더: 미정
+            <div id="leader-plate-C" class="mb-4 p-2.5 text-center text-xs font-bold rounded-xl bg-yellow-950/20 border border-yellow-900/50 text-yellow-400 font-sans">
+              👑 Leader: Pending
             </div>
             <div id="list-zone-C" class="space-y-2 max-h-[300px] overflow-y-auto pr-1">
-              <!-- Dynamic zone members -->
+              <!-- Dynamic members -->
             </div>
           </div>
           <div id="eject-plate-C" class="mt-4 p-2 text-center text-[10px] hidden rounded-xl bg-red-950/30 border border-red-900/50 text-rose-400 font-bold uppercase animate-pulse">
-            💀 방출 대상: 미정
+            💀 Exile Target: Pending
           </div>
         </div>
 
       </div>
 
-      <!-- TRANSMISSION FEED / EVENT TRANSITION LOG -->
+      <!-- SECURITY INTERACTION CONSOLE LOG -->
       <div class="rounded-3xl border border-zinc-900 bg-zinc-950 p-5 shadow-inner">
         <h4 class="text-xs font-bold tracking-widest text-zinc-400 mb-3 font-mono flex items-center gap-1.5">
-          📜 SECURITY INTERACTION TRANSIT LOG (쇄신 기록)
+          📜 SECURITY INTERACTION TRANSIT LOG
         </h4>
         <div id="log-console-feed" class="space-y-2.5 font-mono text-[11px] max-h-[200px] overflow-y-auto pr-1">
-          <!-- Real-Time transition logs generated by rules -->
-          <div class="text-zinc-600">■ System Initialized. Awaiting participant registrations at clients...</div>
+          <!-- Live log events -->
+          <div class="text-zinc-650">■ System Initialized. Awaiting participant registrations...</div>
         </div>
       </div>
 
     </section>
   </main>
 
-  <!-- DEEP FOOTER LICENSE -->
-  <footer class="mt-8 text-center font-mono text-[10px] text-zinc-700 py-4 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-2">
-    <span>SQUID BROADCAST BOARD PANEL v3.5-Compat</span>
-    <span class="text-pink-500">SYSTEM MONITOR: SECURED VIA REALTIME FIREBASE SYNC DECK</span>
+  <!-- DEEP FOOTER DESIGNED BRAND -->
+  <footer class="mt-8 text-center font-mono text-[9px] text-zinc-650 py-4 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-2">
+    <span>OCTOPUS GAME REAL-TIME SCOREBOARD CONTROLLER</span>
+    <span class="text-pink-500">○ ▲ ■ BROADCAST SYSTEM SECURED VIA DATABASE CONNECTIONS</span>
   </footer>
 
-  <!-- DYNAMIC SCRIPT MODULE -->
+  <!-- DYNAMIC STATE MANAGER SCRIPT -->
   <script>
     // ----------------------------------------------------
-    // 1. FIREBASE CONFIGURATION (USER SPECIFIED)
+    // 1. FIREBASE CONFIGURATION
     // ----------------------------------------------------
     const firebaseConfig = {
       apiKey: "AIzaSyBB4ZRirCN2Yn8EbSYbLCN_g3G3RuGhwkg",
@@ -330,54 +327,45 @@
       appId: "1:888081669976:web:9abe6b08dc83811edb4f2d"
     };
 
-    // Firebase Init
+    // Firebase Initializer
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const gameRef = db.ref('game');
 
-    // ----------------------------------------------------
-    // SYSTEM MEMORY & LOCAL TICK ENGINE
-    // ----------------------------------------------------
+    // State Variables
     let gameState = null;
     let localTimerId = null;
-    let localTransitionLogs = []; // Buffer to show logs on the dashboard
 
-    // Korean Narration Script Deck
+    // Narrative scripts translated to pure English
     const SCRIPT_DECK = {
       LOBBY: [
-        { title: "대기 단계 진입", desc: "각 조원들의 참가를 통제 및 접수 처리를 관리하고 있습니다. 참가자는 자신의 스마트 단말기를 조작해 닉네임을 생성하고 원하는 구역에 입장하십시오." },
-        { title: "인원 정원 구축 권고", desc: "각 구역(A, B, C Zone)당 총 5명의 인적 자원이 선발되어 시뮬레이션 대형을 구성하는 것을 이상적으로 권장합니다. 부족한 잔여 자리는 시스템 봇을 소환하여 일제히 채울 수 있습니다." }
+        { title: "Participant Registration Active", desc: "Open for registrations. Direct candidates to pair their device screens by selecting a unique nickname and selecting Zone A, B, or C." },
+        { title: "Roster Seeding Protocol", desc: "To start the experiment with balanced conditions, a full team roster consists of exactly 5 candidates per compartment. You can click 'SEED BOTS' to auto-generate system operators and fill empty slots." }
       ],
       INTRO: {
         1: [
-          { title: "제 1 라운드: 구역 보전 협약서", desc: "설명: 소속 구역 전체가 🔵[BLUE]를 투표하면 5명 모두 상생 생존하고 50포인트를 얻습니다. 단 1명이라도 불신하여 🔴[RED]를 주창 투표하면, 그 구역의 리더가 한 명을 반드시 낙오자(EJECT TARGET)로 지목해 타지로 방출해야 합니다." },
-          { title: "구역 이적 합의 규약", desc: "방출자로 배제된 슬픈 자는 고독사하지 않고, 타 구역의 긴급 대피 구제 시설로 강제 수송 조치되어 생명을 연장하며, 성과 배분은 소량인 10포인트에 그치게 됩니다." }
+          { title: "Round 1: Non-Exclusion Alliance Treaty", desc: "Briefing: If every representative of a zone votes for solidarity with 🔵[COOPERATE], solidarity is secured. All 5 participants survive safely and gain +50 scorecard status. If even a single teammate represents the zone with 🔴[DEFECT], the designated Zone Leader must nominate 1 companion for exile." },
+          { title: "Roster Realignment Regulations", desc: "The exiled teammate faces a points adjustment and is forcefully transferred to a safe refuge zone. This keeps them active in the game with a lower points gain (10 points)." }
         ],
         2: [
-          { title: "제 2 라운드: 협력의 보전 혹은 배신", desc: "설명: 1차 충돌과 방출 이적 사건을 겪은 뒤, 각 조의 구조 형태가 재편되었습니다. 이번 성원 아래 새로운 제2기 리더 임명과 함께 두 번째 협력 서바이벌 투표를 실시하게 됩니다." },
-          { title: "심리 전개 및 신뢰", desc: "상생과 통합을 믿고 전 구역 🔵BLUE 결속을 맺을 것인가? 아니면 독점 이자 배당을 위해 팀원을 배척 방출하고 🔴RED를 단행할 것인가?" }
+          { title: "Round 2: Trust or Betrayal Realignment", desc: "Briefing: Roster divisions have been rebalanced after the first round of relocations. A newly appointed Zone Representative has taken command. Let's start the second treaty vote." },
+          { title: "Alliance Stakes", desc: "Will your compartment choose unified trust to lock down collective points, or execute defensive defection to trigger a backup transfer?" }
         ],
         3: [
-          { title: "제 3 라운드: 최종 우승 점령지 합산 총격전", desc: "설명: 마침내 도달한 마지막 극단의 3단계 결투입니다. 이번 층간 협약이 끝나면 최종 재배치가 적용됩니다." },
-          { title: "챔피언십 점수 집계", desc: "최종 게임 종료 순간, 구역 내 생존한 구원 조원들의 '고유 가치 번호(Intake Pass #)'의 최종 합산치가 가장 높은 Zone이 최후의 독점 상금 승리 선언을 거머쥐게 됩니다." }
+          { title: "Round 3: Final Conquest Team Stand", desc: "Briefing: The final stage of the experiment. This is your last chance for strategic negotiations. This round's realignments will finalize the rosters." },
+          { title: "Final Championship Tally", desc: "When index parameters terminate, the Zone that holds the highest aggregate participant score value wins the grand prize of the Octopus Game!" }
         ]
       }
     };
 
-    // Initialize 
     document.addEventListener('DOMContentLoaded', () => {
-      // Connect to firebase DB listener
       initDBListener();
     });
 
-    // ----------------------------------------------------
-    // Firebase Data Listener
-    // ----------------------------------------------------
     function initDBListener() {
       gameRef.on('value', (snapshot) => {
         const data = snapshot.val();
         if (!data) {
-          // Setup default if empty
           resetPresenterFull();
           return;
         }
@@ -386,38 +374,36 @@
       });
     }
 
-    // Write default layout to Firebase
     function writeInitialStateToFirebase(customState) {
       gameRef.set(customState);
     }
 
     // ----------------------------------------------------
-    // SYSTEM DISPLAY RENDER ENGINE
+    // SYSTEM SCOREBOARD RENDERING ENGINE
     // ----------------------------------------------------
     function renderScoreboard(state) {
       const pList = state.participants || {};
       const round = state.currentRound || 0;
       const step = state.step || 'INTRO';
       
-      // A. Setup Top Indicators
+      // A. Main State Labels
       if (round === 0) {
-        document.getElementById('round-state-text').innerText = "대기소 참여 접수";
+        document.getElementById('round-state-text').innerText = "Standby Lobby Join";
         document.getElementById('phase-state-text').innerText = "GATEWAY OPEN";
       } else if (round > 3) {
-        document.getElementById('round-state-text').innerText = "최종 결론 연출";
+        document.getElementById('round-state-text').innerText = "Simulation Finalized";
         document.getElementById('phase-state-text').innerText = "FINISHED";
       } else {
-        document.getElementById('round-state-text').innerText = "제 " + round + " 라운드";
-        document.getElementById('phase-state-text').innerText = convertStepToKorean(step);
+        document.getElementById('round-state-text').innerText = "ROUND " + round;
+        document.getElementById('phase-state-text').innerText = convertStepToUiText(step);
       }
 
-      // Handle Timer Show/Hide
+      // Timer Display Updates
       const timerDivider = document.getElementById('header-timer-divider');
       const timerBox = document.getElementById('header-timer-box');
       if (state.timerActive) {
         timerDivider.style.display = 'block';
         timerBox.style.display = 'block';
-        // Run Local ticker synchronization
         triggerLocalTicker(state.timerStartTimestamp, state.timerDuration);
       } else {
         timerDivider.style.display = 'none';
@@ -428,7 +414,7 @@
         }
       }
 
-      // B. Presenter dashboard visibility
+      // Controller Mode Toggle
       const lobbyReadyCont = document.getElementById('lobby-ready-container');
       const activeGameEl = document.getElementById('active-game-elements');
       if (round === 0) {
@@ -439,7 +425,7 @@
         activeGameEl.style.display = 'block';
       }
 
-      // C. Large middle alerts
+      // Middle Large Warning displays
       const warningBanner = document.getElementById('ejection-warning');
       const votingChoicesBanner = document.getElementById('voting-step-choices');
       
@@ -455,32 +441,29 @@
         votingChoicesBanner.style.display = 'none';
       }
 
-      // D. Narrative Script Deck Generator
+      // B. Render Narration guidance cards
       renderNarrationScripts(round, step);
 
-      // E. Render Team Cards & Lists (A, B, C Zones)
+      // C. Render Columns Grid A, B, C
       ['A', 'B', 'C'].forEach(zone => {
         renderZonePanel(zone, state, pList);
       });
 
-      // F. Render Logs console
+      // D. Update transaction logs
       renderLogsConsole(state.transitionLogs);
     }
 
-    function convertStepToKorean(step) {
+    function convertStepToUiText(step) {
       switch (step) {
-        case 'INTRO': return '브리핑 & 토론';
-        case 'VOTING': return '생존협약 투표';
-        case 'EJECTION': return '방출 낙오 결정';
-        case 'TRADE_TIME': return '대피 조정 & 점수산출';
-        case 'FINISHED': return '최종 게임 완료';
+        case 'INTRO': return 'BRIEFING & DISCUSSION';
+        case 'VOTING': return 'SURVIVAL CONTRACT VOTE';
+        case 'EJECTION': return 'EXILE TRIGGER PROCESS';
+        case 'TRADE_TIME': return 'RELOCATION & POINT SCORE';
+        case 'FINISHED': return 'CONQUEST COMPLETE';
         default: return step;
       }
     }
 
-    // ----------------------------------------------------
-    // RENDER NARRATION HELPER
-    // ----------------------------------------------------
     function renderNarrationScripts(round, step) {
       const container = document.getElementById('script-container');
       container.innerHTML = '';
@@ -498,41 +481,37 @@
       items.forEach(it => {
         const itemHtml = `
           <div class="p-4 rounded-2xl bg-zinc-900 border border-zinc-850 space-y-1 hover:border-pink-500/20 transition-all">
-            <h5 class="text-xs font-black text-[#FF007F] tracking-wide font-mono">${it.title}</h5>
+            <h5 class="text-xs font-black text-[#FF007F] tracking-wide font-sans">${it.title}</h5>
             <p class="text-[11px] text-zinc-300 leading-relaxed">${it.desc}</p>
           </div>
         `;
         container.innerHTML += itemHtml;
       });
       
-      // Inject phase status helper info at bottom
       const statusMemo = document.createElement('div');
-      statusMemo.className = "text-[10px] text-zinc-500 text-center font-mono py-2";
+      statusMemo.className = "text-[10px] text-zinc-500 text-center font-mono py-2 block w-full border-t border-zinc-900/60 mt-2";
       statusMemo.innerText = `[Active Step: ${step} | Round: ${round}]`;
       container.appendChild(statusMemo);
     }
 
-    // ----------------------------------------------------
-    // RENDER ZONE BOX HELPER
-    // ----------------------------------------------------
     function renderZonePanel(zone, state, pList) {
       const zoneMembers = Object.values(pList).filter(p => p.zone === zone);
       const listContainer = document.getElementById('list-zone-' + zone);
       listContainer.innerHTML = '';
 
-      // Leader Plate Render
+      // Leader designation Status
       const zoneLeaderId = (state.leaders && state.leaders[zone]) || '';
       const leaderPlate = document.getElementById('leader-plate-' + zone);
       
       if (zoneLeaderId && pList[zoneLeaderId]) {
-        leaderPlate.innerText = `👑 리더: ${pList[zoneLeaderId].nickname}`;
+        leaderPlate.innerText = `👑 Leader: ${pList[zoneLeaderId].nickname}`;
         leaderPlate.className = "mb-4 p-2.5 text-center text-xs font-black rounded-xl bg-teal-950/40 border border-teal-500/30 text-teal-300 shadow-[0_0_8px_rgba(0,255,255,0.1)]";
       } else {
-        leaderPlate.innerText = `👑 리더: 결정 대기 중`;
-        leaderPlate.className = "mb-4 p-2.5 text-center text-xs font-bold rounded-xl bg-zinc-900 border border-zinc-850 text-zinc-500";
+        leaderPlate.innerText = `👑 Leader: Pending Selection`;
+        leaderPlate.className = "mb-4 p-2.5 text-center text-xs font-bold rounded-xl bg-zinc-900/60 border border-zinc-855 text-zinc-500";
       }
 
-      // Vote status header badge
+      // Votes Badge State indicators
       const voteBadge = document.getElementById('vote-badge-' + zone);
       const voteCastVal = (state.votes && state.votes[zone]) || '';
       
@@ -541,29 +520,29 @@
         voteBadge.className = "px-2.5 py-0.5 rounded text-[10px] font-bold border border-zinc-850 text-zinc-500 bg-zinc-900 uppercase";
       } else {
         if (voteCastVal === 'BLUE') {
-          voteBadge.innerText = '협력 🔵';
+          voteBadge.innerText = 'COOPERATE 🔵';
           voteBadge.className = "px-2.5 py-0.5 rounded text-[10px] font-black border border-blue-900/60 text-[#00FFFF] bg-blue-950/40 neon-text-cyan uppercase";
         } else if (voteCastVal === 'RED') {
-          voteBadge.innerText = '대립 🔴';
+          voteBadge.innerText = 'DEFECT 🔴';
           voteBadge.className = "px-2.5 py-0.5 rounded text-[10px] font-black border border-rose-900/60 text-[#FF007F] bg-rose-950/40 neon-text-pink uppercase animate-pulse";
         } else {
-          voteBadge.innerText = '선택 중 ❔';
+          voteBadge.innerText = 'VOTING ❔';
           voteBadge.className = "px-2.5 py-0.5 rounded text-[10px] font-bold border border-zinc-800 text-zinc-400 bg-black uppercase";
         }
       }
 
-      // Eject exile bottom plate
+      // Exile bottom Plate highlights
       const ejectPlate = document.getElementById('eject-plate-' + zone);
       const exiledTargetId = (state.ejected && state.ejected[zone]) || '';
       
       if (state.step === 'EJECTION' || state.step === 'TRADE_TIME') {
         if (exiledTargetId && pList[exiledTargetId]) {
           ejectPlate.style.display = 'block';
-          ejectPlate.innerText = `💀 낙오자: ${pList[exiledTargetId].nickname}`;
+          ejectPlate.innerText = `💀 Exiled: ${pList[exiledTargetId].nickname}`;
           ejectPlate.className = "mt-4 p-2 text-center text-[10px] rounded-xl bg-red-950/40 border border-red-500/40 text-red-400 font-extrabold uppercase animate-pulse";
         } else if (voteCastVal === 'RED') {
           ejectPlate.style.display = 'block';
-          ejectPlate.innerText = `⚖️ 방출 지명 대기 중`;
+          ejectPlate.innerText = `⚖️ Ejection Pending...`;
           ejectPlate.className = "mt-4 p-2 text-center text-[10px] rounded-xl bg-zinc-900 border border-zinc-850 text-zinc-400 font-bold uppercase animate-pulse";
         } else {
           ejectPlate.style.display = 'none';
@@ -572,12 +551,12 @@
         ejectPlate.style.display = 'none';
       }
 
-      // Members List Mapping
+      // Layout Team Pass Roster list
       if (zoneMembers.length === 0) {
         listContainer.innerHTML = `
           <div class="text-center py-10 border border-dashed border-zinc-850 rounded-2xl text-xs text-zinc-650 flex flex-col items-center justify-center">
-            <span>참가대원 유도선 개척 대기</span>
-            <span class="text-[9px] mt-1 font-mono text-zinc-700">ZONE STATUS: VACANT</span>
+            <span>Roster vacant. Awaiting candidates.</span>
+            <span class="text-[9px] mt-1 font-mono text-zinc-700">ZONE STATUS: EMPTY</span>
           </div>
         `;
         return;
@@ -608,7 +587,7 @@
             </div>
             
             <div class="flex items-center gap-1.5">
-              <span class="text-[9px] font-mono text-pink-400 font-bold">${p.score || 100} P</span>
+              <span class="text-[9px] font-mono text-pink-400 font-bold">${p.score || 100} PTS</span>
               <span class="px-1.5 py-0.5 rounded text-[8px] font-bold ${p.isBot ? 'bg-zinc-800 text-zinc-550' : 'bg-pink-950/20 text-[#FF007F] border border-pink-500/20'}">
                 ${p.isBot ? 'BOT' : 'HUMAN'}
               </span>
@@ -619,16 +598,13 @@
       });
     }
 
-    // ----------------------------------------------------
-    // RENDER LOGS PANEL
-    // ----------------------------------------------------
     function renderLogsConsole(logs) {
       const feed = document.getElementById('log-console-feed');
       feed.innerHTML = '';
       
       const activeLogs = logs || [];
       if (activeLogs.length === 0) {
-        feed.innerHTML = "<div class='text-zinc-600 font-mono text-[10px]'>■ 가동 대기소 내역 없음. 게임 기록이 여기에 표시됩니다.</div>";
+        feed.innerHTML = "<div class='text-zinc-600 font-mono text-[10px]'>■ No active logs. Real-time experiment events display here.</div>";
         return;
       }
 
@@ -639,13 +615,10 @@
         feed.appendChild(row);
       });
       
-      // Auto-Scroll to bottom
       feed.scrollTop = feed.scrollHeight;
     }
 
-    // ----------------------------------------------------
-    // LOCAL DIGITAL CLOCK countdown
-    // ----------------------------------------------------
+    // Timer countdown 1s pulse loops
     function triggerLocalTicker(startTimestamp, duration) {
       if (localTimerId) {
         clearInterval(localTimerId);
@@ -661,8 +634,6 @@
           rem = 0;
           clearInterval(localTimerId);
           document.getElementById('countdown-timer').innerText = "00:00";
-          
-          // Trigger timeout safe logic automatically on the database (by host role)
           executeTimeoutFallbackRules();
           return;
         }
@@ -675,54 +646,44 @@
       localTimerId = setInterval(updateTick, 1000);
     }
 
-    // When timer expires, apply fallback defaults dynamically to Firebase
     function executeTimeoutFallbackRules() {
       if (!gameState) return;
-      const round = gameState.currentRound;
       const step = gameState.step;
 
-      // Only host writes fallback to prevent collisions
       if (step === 'INTRO') {
-        // Just turn off timer and let presenter advance manually
         gameRef.child('timerActive').set(false);
       } 
       else if (step === 'VOTING') {
-        // If leaders have not cast vote, apply balanced defaults!
         simulateMissingVotes();
       } 
       else if (step === 'EJECTION') {
-        // If leader did not eject, apply random ejection
         simulateMissingEjections();
       }
     }
 
     // ----------------------------------------------------
-    // 5. SERVER STATE MODIFICATION UTILITIES
+    // SERVER OPERATIONS ACTIONS COMMANDS
     // ----------------------------------------------------
-
-    // Commit Entry intake closing (START)
+    
+    // Close Lobby registration and setup Round 1 leaders
     function commitReadyLobby() {
       if (!gameState) return;
       const pList = gameState.participants || {};
       const count = Object.keys(pList).length;
 
       if (count === 0) {
-        alert('가입한 참가자가 없습니다! 먼저 🤖 봇 15명 소집 버튼을 누르거나 장비로 참가하십시오.');
+        alert('Roster is empty! Please click the "🎯 SEED 15 BOTS" button first or join with human devices.');
         return;
       }
 
-      // Choose leaders for A, B, C prioritising Human players
       const leadersObj = {};
       const zones = ['A', 'B', 'C'];
       
       zones.forEach(z => {
         const zoneMembers = Object.values(pList).filter(p => p.zone === z);
         if (zoneMembers.length > 0) {
-          // Filter humans
           const humans = zoneMembers.filter(p => !p.isBot);
           const candidates = humans.length > 0 ? humans : zoneMembers;
-          
-          // Pick random
           const chosen = candidates[Math.floor(Math.random() * candidates.length)];
           leadersObj[z] = chosen.id;
         } else {
@@ -730,7 +691,6 @@
         }
       });
 
-      // Advance Round 1 Stage
       const startPayload = {
         currentRound: 1,
         step: 'INTRO',
@@ -740,14 +700,13 @@
         leaders: leadersObj,
         votes: { A: "", B: "", C: "" },
         ejected: { A: "", B: "", C: "" },
-        transitionLogs: ["📢 제 1 라운드 시작! 미션 가이드 북 브리핑 브로드캐스트가 개시되었습니다."],
+        transitionLogs: ["📢 Round 1 Initiated. Read the scenario and start team preparations."],
         systemSerialNum: gameState.systemSerialNum || count
       };
 
       gameRef.update(startPayload);
     }
 
-    // Start 30s timer
     function startDiscussionTimer30() {
       if (!gameState) return;
       gameRef.update({
@@ -757,7 +716,6 @@
       });
     }
 
-    // Step Advancement Engine 
     function forceStepAdvance() {
       if (!gameState) return;
       const round = gameState.currentRound;
@@ -765,18 +723,15 @@
 
       if (round === 0) return;
 
-      // Stop any running timer
       gameRef.child('timerActive').set(false);
 
       if (step === 'INTRO') {
-        // INTRO -> VOTING
         gameRef.update({
           step: 'VOTING',
           votes: { A: "", B: "", C: "" }
         });
       } 
       else if (step === 'VOTING') {
-        // VOTING -> Calculate results -> Go to EJECTION or next round directly!
         const votes = gameState.votes || {};
         const A_vote = votes.A || 'BLUE';
         const B_vote = votes.B || 'BLUE';
@@ -790,19 +745,15 @@
             ejected: { A: "", B: "", C: "" }
           });
         } else {
-          // Everyone survives, no ejection! Skip directly to TRADE_TIME / point tally
           triggerDeterministicTradeAndTally();
         }
       } 
       else if (step === 'EJECTION') {
-        // EJECTION -> TRADE_TIME (relocation sequence)
         triggerDeterministicTradeAndTally();
       } 
       else if (step === 'TRADE_TIME') {
-        // TRADE_TIME -> INTRO (Round + 1) or FINISHED
         const nextRound = round + 1;
         if (nextRound <= 3) {
-          // Setup new leaders for next round
           const pList = gameState.participants || {};
           const nextLeaders = {};
           ['A', 'B', 'C'].forEach(z => {
@@ -823,10 +774,9 @@
             votes: { A: "", B: "", C: "" },
             ejected: { A: "", B: "", C: "" },
             leaders: nextLeaders,
-            transitionLogs: [`📢 제 ${nextRound} 라운드 운명 조정 브리핑이 하달되었습니다.`]
+            transitionLogs: [`📢 Round ${nextRound} Scenario instructions downloaded. Check your terminals.`]
           });
         } else {
-          // Finished Game!
           gameRef.update({
             step: 'FINISHED',
             currentRound: 4
@@ -835,7 +785,6 @@
       }
     }
 
-    // Deterministic relocation formulas & score tally
     function triggerDeterministicTradeAndTally() {
       if (!gameState) return;
       const pList = gameState.participants || {};
@@ -844,14 +793,12 @@
       const round = gameState.currentRound;
 
       const logs = [];
-      logs.push(`🛡️ 제 ${round} 단계 방출 피난 이송 연산이 개시되었습니다.`);
+      logs.push(`🛡️ Initiating relocation and point-awarding sequences for Round ${round}...`);
 
-      // Find active ejectees
       const zones = ['A', 'B', 'C'];
       const activeEjected = {};
       
       zones.forEach(z => {
-        // Only eject if they voted RED
         if (votes[z] === 'RED') {
           const ejectId = ejected[z];
           if (ejectId && pList[ejectId]) {
@@ -862,24 +809,22 @@
 
       const redZonesList = Object.keys(activeEjected);
 
-      // Relocate target zone formulas
       if (redZonesList.length === 3) {
         const pA = activeEjected.A;
         const pB = activeEjected.B;
         const pC = activeEjected.C;
         
-        // Permutation swap
         const pathOption = Math.random() < 0.5;
         if (pathOption) {
           pA.zone = 'B';
           pB.zone = 'C';
           pC.zone = 'A';
-          logs.push(`🔄 3개 구역 전체 충돌: [${pA.nickname}] A ➡️ B구역 | [${pB.nickname}] B ➡️ C구역 | [${pC.nickname}] C ➡️ A구역 피난`);
+          logs.push(`🔄 Roster realignments triggered: [${pA.nickname}] moved to Zone B | [${pB.nickname}] moved to Zone C | [${pC.nickname}] moved to Zone A.`);
         } else {
           pA.zone = 'C';
           pB.zone = 'A';
           pC.zone = 'B';
-          logs.push(`🔄 3개 구역 전체 충돌: [${pA.nickname}] A ➡️ C구역 | [${pB.nickname}] B ➡️ A구역 | [${pC.nickname}] C ➡️ B구역 피난`);
+          logs.push(`🔄 Roster realignments triggered: [${pA.nickname}] moved to Zone C | [${pB.nickname}] moved to Zone A | [${pC.nickname}] moved to Zone B.`);
         }
       } 
       else if (redZonesList.length === 2) {
@@ -888,32 +833,26 @@
         const p1 = activeEjected[z1];
         const p2 = activeEjected[z2];
         
-        // Swap zones
         p1.zone = z2;
         p2.zone = z1;
-        logs.push(`🔄 상호 조율 방출: [${p1.nickname}] ${z1} ➡️ ${z2}구역 대치 | [${p2.nickname}] ${z2} ➡️ ${z1}구역 대치`);
+        logs.push(`🔄 Tactical trade swap executed: [${p1.nickname}] transferred to ${z2} | [${p2.nickname}] transferred to ${z1}.`);
       } 
       else if (redZonesList.length === 1) {
         const rZone = redZonesList[0];
         const p = activeEjected[rZone];
         
-        // Move to one of other two zones at random
         const destCandidates = zones.filter(z => z !== rZone);
         const dest = destCandidates[Math.floor(Math.random() * destCandidates.length)];
         
         p.zone = dest;
-        logs.push(`🔄 단독 방출 수용: [${p.nickname}] ${rZone} ➡️ ${dest}구역 수용소 조치`);
+        logs.push(`🔄 Single exile relocation: [${p.nickname}] has been transferred to Zone ${dest}.`);
       } 
       else {
-        logs.push(`🕊️ 전 구역 BLUE 만장일치: 모두가 상생하고 생명을 무사 안착했습니다.`);
+        logs.push(`🕊️ All zones voted BLUE: All sectors stayed unified with preserved rosters.`);
       }
 
-      // Point reward accumulation
+      // Point distributions
       Object.values(pList).forEach(p => {
-        const pZone = p.zone;
-        const wasEjectedThisRound = false;
-        
-        // Check if this player was the nominated ejectee of their PREVIOUS zone
         let checkedEjected = false;
         zones.forEach(z => {
           if (ejected[z] === p.id && votes[z] === 'RED') {
@@ -922,13 +861,12 @@
         });
 
         if (checkedEjected) {
-          p.score = (p.score || 100) + 10; // Low bonus
+          p.score = (p.score || 100) + 10;
         } else {
-          p.score = (p.score || 100) + 50; // Survivability award points
+          p.score = (p.score || 100) + 50;
         }
       });
 
-      // Push updates
       gameRef.update({
         step: 'TRADE_TIME',
         participants: pList,
@@ -936,7 +874,6 @@
       });
     }
 
-    // Seeding 15 System simulated Bots
     function seedPresenterBots() {
       if (!gameState) return;
       
@@ -954,7 +891,7 @@
           const botId = `bot_${z.toLowerCase()}_${i + 1}_${Math.random().toString(36).substring(2, 6)}`;
           currentParticipants[botId] = {
             id: botId,
-            nickname: `${z}구역_인공지능${i + 1}`,
+            nickname: `Bot_${z}${i + 1}`,
             zone: z,
             num: currentSerial,
             joinedAt: firebase.database.ServerValue.TIMESTAMP,
@@ -967,24 +904,21 @@
       gameRef.update({
         participants: currentParticipants,
         systemSerialNum: currentSerial,
-        transitionLogs: ["🤖 시스템 봇 조율 완료! 빈자리가 인공지능으로 충전되어 모든 구역이 5인으로 세팅되었습니다."]
+        transitionLogs: ["🤖 System bots seeded. All zones are set to full 5-player state."]
       });
     }
 
-    // Simulation Tools: Votes
     function simulateMissingVotes() {
       if (!gameState) return;
       const currentVotes = gameState.votes || {};
       ['A', 'B', 'C'].forEach(z => {
         if (!currentVotes[z]) {
-          // Cast at random
           currentVotes[z] = Math.random() < 0.55 ? 'BLUE' : 'RED';
         }
       });
       gameRef.child('votes').set(currentVotes);
     }
 
-    // Simulation Tools: Exile target
     function simulateMissingEjections() {
       if (!gameState) return;
       const currentEjected = gameState.ejected || {};
@@ -996,7 +930,6 @@
           const zoneMembers = Object.values(pList).filter(p => p.zone === z);
           const leaderId = gameState.leaders[z];
           
-          // Select other than leader
           const nonLeaderCandidates = zoneMembers.filter(p => p.id !== leaderId);
           const finalCandidates = nonLeaderCandidates.length > 0 ? nonLeaderCandidates : zoneMembers;
           
@@ -1010,7 +943,6 @@
       gameRef.child('ejected').set(currentEjected);
     }
 
-    // Hard Core Purge All Reset
     function resetPresenterFull() {
       if (localTimerId) {
         clearInterval(localTimerId);
@@ -1026,7 +958,7 @@
         leaders: { A: "", B: "", C: "" },
         votes: { A: "", B: "", C: "" },
         ejected: { A: "", B: "", C: "" },
-        transitionLogs: ["🔄 호스트에 의해 전체 통신 서버가 강제 초기화되었으며, 신규 대기실 가입 통로가 복구되었습니다."],
+        transitionLogs: ["🔄 System servers reset completed. Registration panels are active."],
         systemSerialNum: 0,
         participants: {}
       };
