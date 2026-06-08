@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>오징어 게임 서바이벌 - 참가자 컨트롤러</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no font-family-sans">
+  <title>Octopus Game Survival - Participant Device</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,11 +13,11 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
   
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   
   <style>
     body {
-      font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+      font-family: 'Outfit', sans-serif;
       background-color: #030303;
       color: #ffffff;
       -webkit-tap-highlight-color: transparent;
@@ -36,7 +36,7 @@
       box-shadow: 0 0 12px rgba(0, 255, 255, 0.4), inset 0 0 4px rgba(0, 255, 255, 0.2);
       border-color: rgba(0, 255, 255, 0.8);
     }
-    /* 3D 푸시 버튼 효과 */
+    /* 3D Push Button Effect */
     .glowing-btn {
       position: relative;
       transition: all 0.15s ease;
@@ -45,7 +45,7 @@
     .glowing-btn:active {
       transform: translateY(4px);
     }
-    /* 로딩 인디케이터 회전 외곽선 */
+    /* Rotating loading spinner */
     .spinner {
       border: 3px solid rgba(255, 0, 127, 0.1);
       border-top-color: #ff007f;
@@ -62,7 +62,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between p-5 relative overflow-x-hidden select-none">
 
-  <!-- 네온 탑 그리드 데코레이션 -->
+  <!-- Top Ambient Glow -->
   <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,255,255,0.05)_0%,transparent_75%)] pointer-events-none"></div>
   <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-500 via-purple-600 to-cyan-400 opacity-70"></div>
 
@@ -75,12 +75,12 @@
         <span class="w-6 h-6 border-2 border-[#00FF55] flex items-center justify-center font-bold text-[#00FF55] text-xs">■</span>
       </div>
       <div>
-        <h2 class="text-xs font-black tracking-widest text-zinc-300 uppercase leading-none">SURVIVAL CHIPS</h2>
-        <span class="text-[8px] text-[#00FFFF] font-mono tracking-widest leading-none block mt-0.5">PARTICIPANT DEVICE</span>
+        <h2 class="text-xs font-black tracking-widest text-zinc-300 uppercase leading-none">OCTOPUS GAME</h2>
+        <span class="text-[8px] text-[#00FFFF] font-mono tracking-widest leading-none block mt-0.5">PARTICIPANT TERMINAL</span>
       </div>
     </div>
 
-    <!-- identity display (로그인 후 보임) -->
+    <!-- Identity badge (Visible post-enrollment) -->
     <div id="identity-badge" style="display:none;" class="flex items-center gap-2">
       <span id="badge-card-num" class="px-2.5 py-0.5 rounded-full font-black text-xs text-[#00FFFF] border border-[#00FFFF]/30 bg-[#00FFFF]/10">#--</span>
       <span id="badge-score" class="px-2.5 py-0.5 rounded-full font-bold text-[10px] text-pink-400 border border-pink-500/30 bg-pink-500/10">-- P</span>
@@ -90,18 +90,18 @@
   <!-- MAIN DYNAMIC CONTAINER -->
   <main class="flex-grow flex flex-col justify-center py-6 relative z-10 max-w-md mx-auto w-full transition-all duration-300">
     
-    <!-- SCREEN 1: CLIENT INITIAL CONNECT & DB SYNCHRONIZER (자동 설정) -->
+    <!-- SCREEN 1: CLIENT INITIAL CONNECT & DB SYNCHRONIZER -->
     <div id="screen-loading-db" class="space-y-4 text-center">
       <div class="spinner mx-auto"></div>
-      <p class="text-xs text-zinc-500 font-mono tracking-widest uppercase">Initializing Firebase Relay Network...</p>
+      <p class="text-xs text-zinc-500 font-mono tracking-widest uppercase">Connecting to Firebase Relay...</p>
     </div>
 
-    <!-- SCREEN 2: ENROLL FORM (대기실 가입) -->
+    <!-- SCREEN 2: ENROLL FORM (Join Waiting lobby) -->
     <div id="screen-enroll" style="display:none;" class="space-y-6">
       <div class="text-center space-y-1.5">
-        <span class="px-2.5 py-0.5 bg-pink-950 text-pink-400 border border-pink-900 text-[9px] font-black tracking-widest uppercase rounded">참가자 단말기 게이트웨이</span>
-        <h2 class="text-3xl font-black text-white leading-none">오징어 게임</h2>
-        <p class="text-xs text-zinc-400">자신의 유니크 닉네임을 생성하고 진입 구역을 선점하십시오.</p>
+        <span class="px-2.5 py-0.5 bg-pink-950 text-pink-400 border border-pink-900 text-[9px] font-black tracking-widest uppercase rounded">OCTOPUS PORTAL GATEWAY</span>
+        <h2 class="text-3xl font-black text-white leading-none">OCTOPUS GAME</h2>
+        <p class="text-xs text-zinc-400">Choose a unique nickname and select your primary starting zone.</p>
       </div>
 
       <div class="p-6 rounded-3xl bg-zinc-950 border border-zinc-850/80 space-y-5 shadow-2xl">
@@ -110,23 +110,23 @@
           <input 
             type="text" 
             id="input-nickname" 
-            placeholder="닉네임 입력 (최대 10자)" 
+            placeholder="Nickname (Max 10 chars)" 
             maxlength="10"
-            class="w-full bg-zinc-900 border border-zinc-700 rounded-2xl px-4 py-3.5 text-sm font-bold text-white focus:border-[#00FFFF] focus:outline-none transition-all"
+            class="w-full bg-zinc-900 border border-zinc-705 rounded-2xl px-4 py-3.5 text-sm font-bold text-white focus:border-[#00FFFF] focus:outline-none transition-all"
           />
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-zinc-400 mb-2 font-mono">2. SELECT SECURITY ZONE</label>
+          <label class="block text-xs font-bold text-zinc-400 mb-2 font-mono">2. SELECT STARTING ZONE</label>
           <div class="grid grid-cols-3 gap-2">
             <button onclick="selectZone('A')" id="btn-zone-A" class="py-3.5 rounded-2xl border-2 font-black transition-all bg-black border-zinc-800 text-zinc-400">
-              A 구역
+              Zone A
             </button>
             <button onclick="selectZone('B')" id="btn-zone-B" class="py-3.5 rounded-2xl border-2 font-black transition-all bg-black border-zinc-800 text-zinc-400">
-              B 구역
+              Zone B
             </button>
             <button onclick="selectZone('C')" id="btn-zone-C" class="py-3.5 rounded-2xl border-2 font-black transition-all bg-black border-zinc-800 text-zinc-400">
-              C 구역
+              Zone C
             </button>
           </div>
         </div>
@@ -135,12 +135,12 @@
           onclick="enrollParticipant()"
           class="w-full py-4 rounded-2xl text-xs font-black tracking-widest uppercase bg-[#FF007F] text-white hover:bg-pink-400 transition shadow-[0_0_20px_rgba(255,0,127,0.3)] cursor-pointer mt-2"
         >
-          입장 및 대기 등록 ▶
+          Register & Standby ▶
         </button>
       </div>
     </div>
 
-    <!-- SCREEN 3: LOBBY STANDBY (등록 완료 상태로 호스트 시작 대기) -->
+    <!-- SCREEN 3: LOBBY STANDBY (waiting for host to start round 1) -->
     <div id="screen-lobby-wait" style="display:none;" class="text-center space-y-5 p-6 rounded-3xl bg-zinc-950/80 border border-zinc-900">
       <div class="relative w-20 h-20 mx-auto">
         <div class="absolute inset-0 rounded-full border-4 border-yellow-500/20 animate-ping"></div>
@@ -149,10 +149,10 @@
         </div>
       </div>
       <div class="space-y-2">
-        <h3 id="lobby-wait-title" class="text-xl font-black text-white">대기소 진입 성공</h3>
+        <h3 id="lobby-wait-title" class="text-xl font-black text-white font-sans tracking-tight">Standby Zone Entered</h3>
         <p class="text-xs text-zinc-400 leading-relaxed md:px-4">
-          참가 등록이 승인되었습니다. 전광판에서 자신의 닉네임을 확인하세요.<br>
-          <span class="text-[#00FFFF]">호스트가 전광판 제어판에서 게임을 개시하면</span> 실시간 연동이 가동됩니다.
+          Your reservation is approved. Please look up your name on the main billboard.<br>
+          <span class="text-[#00FFFF]">Once the host begins the simulator</span>, real-time sync starts.
         </p>
       </div>
       
@@ -164,32 +164,32 @@
             <span id="lobby-my-zone" class="font-extrabold text-white text-md">A</span>
           </div>
           <div class="bg-zinc-900 px-3.5 py-2 rounded-xl border border-zinc-800">
-            <span class="text-[9px] text-zinc-500 block uppercase font-bold">Defense ID</span>
+            <span class="text-[9px] text-zinc-500 block uppercase font-bold">Card ID</span>
             <span id="lobby-my-card" class="font-mono font-black text-white text-md">#--</span>
           </div>
         </div>
       </div>
       
       <button onclick="clearLocalSession()" class="text-[10px] text-zinc-600 underline hover:text-zinc-400 mt-4 block mx-auto py-1">
-        세션 삭제 및 재등록
+        Reset Profile and Register Again
       </button>
     </div>
 
-    <!-- SCREEN 4: INTAKE CLOSED SPECTATOR (중간 진입 불가 상태) -->
+    <!-- SCREEN 4: INTAKE CLOSED SPECTATOR (cannot join mid-game) -->
     <div id="screen-spectating" style="display:none;" class="text-center space-y-6 py-8 px-6 bg-zinc-950 border border-zinc-900 rounded-3xl">
       <div class="w-16 h-16 mx-auto bg-red-950/40 border-2 border-red-500 text-red-500 rounded-full flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(239,68,68,0.3)]">
         🔒
       </div>
       <div class="space-y-2">
-        <h3 class="text-lg font-black text-red-500 uppercase tracking-widest font-mono">INTAKE LOCKED</h3>
+        <h3 class="text-md font-black text-red-500 uppercase tracking-widest font-mono">Intake Closed</h3>
         <p class="text-xs text-zinc-400 leading-relaxed">
-          서바이벌 게임이 진행 중이므로 신규 참가가 통제됩니다.<br>
-          현재 라운드가 끝난 뒤 호스트가 전체 초기화를 하면 다시 입장 등록을 할 수 있습니다. 실시간 관전을 즐겨주세요.
+          The survival game is in progress. Registration is locked.<br>
+          You elements can register again once the host triggers a full server reset. Please spectate real-time updates!
         </p>
       </div>
     </div>
 
-    <!-- SCREEN 5: INTRO / BRIEFING WAIT (라운드 오프닝 설명 대기) -->
+    <!-- SCREEN 5: INTRO / BRIEFING WAIT (waiting for active description) -->
     <div id="screen-round-intro" style="display:none;" class="space-y-6">
       <div class="p-6 rounded-3xl bg-zinc-950 border border-zinc-850 space-y-4">
         <div class="flex justify-between items-center border-b border-zinc-900 pb-3">
@@ -198,32 +198,32 @@
         </div>
         
         <div class="space-y-2 py-2">
-          <p class="text-[11px] text-zinc-400 uppercase tracking-widest font-mono">Active Game Status</p>
-          <h3 id="wait-step-status" class="text-xl font-black text-white">시뮬레이션 전단 대기 중...</h3>
+          <p class="text-[11px] text-zinc-400 uppercase tracking-widest font-mono">Survival Simulator Status</p>
+          <h3 id="wait-step-status" class="text-xl font-black text-white tracking-tight">Awaiting Simulator Instructions...</h3>
           <p class="text-xs text-zinc-400 leading-relaxed">
-            호스트 전광판에서 미션 시나리오를 방송하고 있습니다. 전광판 방송을 주의 깊게 듣거나 확인하십시오.<br>
-            곧이어 구역 생존 투표 선택권이 개시됩니다.
+            The Host is broadcasting the official mission scenario on the main board. Watch it closely or listen to the briefing instructions.<br>
+            Zone survival voting will start shortly.
           </p>
         </div>
 
         <div id="intro-leader-infobox" class="p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800 text-center space-y-1">
-          <span class="text-[9px] text-zinc-500 font-bold block uppercase tracking-widest">Zone Elected Leader</span>
+          <span class="text-[9px] text-zinc-500 font-bold block uppercase tracking-widest">YOUR ELECTED ZONE LEADER</span>
           <span id="intro-zone-leader-name" class="font-extrabold text-sm text-[#00FFFF] neon-text-cyan">--</span>
           <span id="intro-is-me-badge" style="display:none;" class="inline-block ml-2 px-2 py-0.5 bg-[#FF007F] text-white text-[8px] font-black rounded-lg">LEADER 👑</span>
         </div>
       </div>
     </div>
 
-    <!-- SCREEN 6: VOTING ACTION (투표 단계) -->
+    <!-- SCREEN 6: VOTING ACTION (Voting Stage) -->
     <div id="screen-voting" style="display:none;" class="space-y-6">
       
       <!-- Leader View -->
       <div id="voting-is-leader" style="display:none;" class="space-y-5">
         <div class="text-center space-y-1.5">
           <span class="px-3 py-1 bg-yellow-950/40 text-yellow-400 border border-yellow-800 text-[10px] font-black tracking-widest uppercase rounded-full inline-block">ZONE LEADER AUTHORITY 👑</span>
-          <h2 class="text-2xl font-black text-white leading-tight">구역 결투 운명 선택</h2>
+          <h2 class="text-2xl font-black text-white leading-tight">Zone Survival Decision</h2>
           <p class="text-xs text-zinc-400 px-2 leading-relaxed">
-            귀하는 구역의 대표 주체인 자격으로 <span class="text-[#FF007F] font-bold">생존 협동(BLUE)</span> 또는 <span class="text-yellow-400 font-bold">방출 대립(RED)</span> 합의를 가동해야 합니다.
+            As the representative of your zone, choose either <span class="text-cyan-400 font-bold">COOPERATE (BLUE)</span> or <span class="text-pink-500 font-bold">DEFECT (RED)</span> for your team's destiny.
           </p>
         </div>
 
@@ -231,24 +231,24 @@
           <!-- BLUE -->
           <button 
             onclick="castZoneVote('BLUE')"
-            class="glowing-btn p-5 rounded-3xl border-2 border-blue-500 bg-blue-950/20 text-center space-y-3 cursor-pointer shadow-[0_0_20px_rgba(59,130,246,0.2)] focus:border-blue-400"
+            class="glowing-btn p-5 rounded-3xl border-2 border-blue-500 bg-blue-950/20 text-center space-y-3 cursor-pointer shadow-[0_0_20px_rgba(59,130,246,0.2)] focus:border-blue-400 animate-pulse"
           >
             <div class="text-4xl">🔵</div>
             <div>
-              <h4 class="font-black text-[#00FFFF] neon-text-cyan text-sm">협력 (BLUE)</h4>
-              <p class="text-[9px] text-zinc-400 leading-tight mt-1">모두 상생하고 협력하여 대위 전원 수호</p>
+              <h4 class="font-black text-[#00FFFF] neon-text-cyan text-sm">COOPERATE (BLUE)</h4>
+              <p class="text-[9px] text-zinc-400 leading-tight mt-1">Trust and save everyone. No exile from this zone.</p>
             </div>
           </button>
 
           <!-- RED -->
           <button 
             onclick="castZoneVote('RED')"
-            class="glowing-btn p-5 rounded-3xl border-2 border-[#FF007F] bg-pink-950/20 text-center space-y-3 cursor-pointer shadow-[0_0_20px_rgba(255,0,127,0.2)] focus:border-[#FF007F]"
+            class="glowing-btn p-5 rounded-3xl border-2 border-[#FF007F] bg-pink-950/20 text-center space-y-3 cursor-pointer shadow-[0_0_20px_rgba(255,0,127,0.2)] focus:border-[#FF007F] active:border-pink-400"
           >
             <div class="text-4xl">🔴</div>
             <div>
-              <h4 class="font-black text-[#FF007F] neon-text-pink text-sm">대립 (RED)</h4>
-              <p class="text-[9px] text-zinc-400 leading-tight mt-1">배타적 행동으로 낙오자 1명 무조건 방출</p>
+              <h4 class="font-black text-[#FF007F] neon-text-pink text-sm">DEFECT (RED)</h4>
+              <p class="text-[9px] text-zinc-400 leading-tight mt-1 border-t border-zinc-900 pt-1">Defect to secure safety. Eject 1 member.</p>
             </div>
           </button>
         </div>
@@ -262,28 +262,28 @@
       <div id="voting-is-member" style="display:none;" class="p-6 rounded-3xl bg-zinc-950 border border-zinc-850/80 text-center space-y-4">
         <div class="spinner mx-auto"></div>
         <div class="space-y-1.5">
-          <h3 class="text-md font-bold text-white tracking-widest leading-none">구역 의사 수합 중...</h3>
+          <h3 class="text-md font-bold text-white tracking-widest leading-none">Treaty Consensus in Progress...</h3>
           <p class="text-xs text-zinc-400 leading-relaxed max-w-xs mx-auto">
-            생존 투표권을 행할 대표가 구역 결의안을 작성 중입니다.<br>
-            소속 구역의 운명 결정이 전광판에 연동될 때까지 대기해 주십시오.
+            Your elected Zone Leader is deciding your zone's survival choice.<br>
+            Please wait until the final treaty decision is synchronized.
           </p>
         </div>
         <div class="bg-zinc-900/60 p-3 rounded-2xl text-[10px] text-zinc-500 font-mono tracking-wider">
-          소속 구역 리더: <span id="member-target-leader-nickname" class="text-[#00FFFF] font-bold">--</span>
+          Your Leader: <span id="member-target-leader-nickname" class="text-[#00FFFF] font-bold">--</span>
         </div>
       </div>
     </div>
 
-    <!-- SCREEN 7: EJECTION TRIGGER (낙오자 결정 구문) -->
+    <!-- SCREEN 7: EJECTION TRIGGER (Nominate Ejection) -->
     <div id="screen-ejection" style="display:none;" class="space-y-6">
       
       <!-- Ejected Team Leader View -->
       <div id="ejection-leader-pnl" style="display:none;" class="space-y-4">
         <div class="text-center space-y-1.5">
-          <span class="px-3 py-1 bg-red-950/50 text-red-400 border border-red-800 text-[10px] font-black tracking-widest uppercase rounded-full inline-block">방출 위촉 지명권 발동 ⚖️</span>
+          <span class="px-3 py-1 bg-red-950/50 text-red-400 border border-red-800 text-[10px] font-black tracking-widest uppercase rounded-full inline-block">EXILE NOMINATION CONSOLE ⚖️</span>
           <h3 class="text-xl font-black text-rose-100 uppercase font-mono">Nominate Exile Target</h3>
           <p class="text-xs text-rose-400">
-            소속 구역이 [RED]를 투표했습니다. 생존을 양도할 낙오 대상을 1명 반드시 골라 방출 단행 버튼을 누르십시오.
+            Your zone voted [RED]. Select 1 zone teammate to exile and relocate. Execute the selection below.
           </p>
         </div>
 
@@ -297,7 +297,7 @@
           disabled
           class="w-full py-4 rounded-xl text-xs font-black tracking-widest uppercase bg-zinc-800 text-zinc-500 cursor-not-allowed transition"
         >
-          방출 대상 단행하기 ⚔️
+          Confirm Exile Decision ⚔
         </button>
       </div>
 
@@ -305,10 +305,10 @@
       <div id="ejection-citizen-pnl" style="display:none;" class="p-6 rounded-3xl bg-zinc-950 border border-zinc-850 text-center space-y-4">
         <div class="spinner mx-auto"></div>
         <div class="space-y-1.5">
-          <h3 class="text-md font-bold text-white tracking-widest">낙오 추적 프로세서 가동</h3>
-          <p class="text-xs text-zinc-400 leading-relaxed md:px-2">
-            방출 결정 구역의 대표자가 방출 결단을 집행하고 있습니다.<br>
-            자신이 배제되지 않도록 전광판의 이탈자 지목을 기다리십시오.
+          <h3 id="exile-citizen-title" class="text-md font-bold text-white tracking-widest">Exile Selection Underway</h3>
+          <p id="exile-citizen-desc" class="text-xs text-zinc-400 leading-relaxed md:px-2">
+            Your Zone Leader is choosing a member for exile as per the RED treaty.<br>
+            Hold tight and watch your status on the board!
           </p>
         </div>
       </div>
@@ -320,49 +320,49 @@
         <div id="trade-result-symbol" class="text-5xl">🛡️</div>
         
         <div class="space-y-1.5">
-          <h3 class="text-xl font-black text-white">조정 및 쇄신 통보</h3>
+          <h3 class="text-xl font-black text-white">Relocation & Outcome</h3>
           <p id="trade-outcome-description" class="text-xs text-zinc-400 leading-relaxed max-w-xs mx-auto">
-            현재 층간 재배열 작업이 끝났습니다. 소속 정보가 전광판에 의해 임베디드 갱신 처리되었습니다.
+            The zone rearrangement process has been successfully completed. Your connection registry has been updated.
           </p>
         </div>
 
         <div class="grid grid-cols-2 gap-3 max-w-xs mx-auto border-t border-zinc-900 pt-4">
           <div class="bg-zinc-900 p-3 rounded-2xl border border-zinc-800">
-            <span class="text-[9px] text-zinc-500 block font-bold uppercase">소속 구역</span>
+            <span class="text-[9px] text-zinc-500 block font-bold uppercase">My Zone</span>
             <span id="trade-my-new-zone" class="text-lg font-black text-[#00FFFF] neon-text-cyan">A</span>
           </div>
           <div class="bg-zinc-900 p-3 rounded-2xl border border-zinc-800">
-            <span class="text-[9px] text-zinc-500 block font-bold uppercase">내 보유 SCORE</span>
+            <span class="text-[9px] text-zinc-500 block font-bold uppercase">Total Score</span>
             <span id="trade-my-score" class="text-lg font-black text-pink-400 neon-text-pink">-- P</span>
           </div>
         </div>
 
-        <p class="text-[10px] text-zinc-500">
-          호스트가 전광판에서 다음 라운드를 가동할 때까지 통신 상태를 지속하십시오.
+        <p class="text-[10px] text-zinc-500 font-mono">
+          Keep your terminal active. The next round will start automatically shortly.
         </p>
       </div>
     </div>
 
-    <!-- SCREEN 9: FINISHED VICTORY DISPLAY (라운드 종료 우승 결사) -->
+    <!-- SCREEN 9: FINISHED VICTORY DISPLAY -->
     <div id="screen-finished" style="display:none;" class="space-y-5">
       <div class="p-6 rounded-3xl bg-zinc-950 border-2 border-yellow-500 text-center space-y-5 shadow-[0_0_25px_rgba(234,179,8,0.2)]">
         <div class="text-5xl animate-bounce">🏆</div>
         
         <div class="space-y-2">
-          <h3 class="text-2xl font-black text-yellow-400 tracking-wider font-mono">SQUID GAME FINISHED</h3>
+          <h3 class="text-2xl font-black text-yellow-400 tracking-wider font-mono">SIMULATION TERMINATED</h3>
           <p class="text-xs text-zinc-300">
-            최종 3라운드가 모두 종료되었습니다! 생존 상태를 보전하셨습니까?
+            All 3 rounds of the Octopus Game have ended. Have you successfully survived?
           </p>
         </div>
 
         <div class="p-4 rounded-2xl bg-zinc-900/50 border border-zinc-800 max-w-xs mx-auto leading-relaxed">
-          <span class="text-[9px] text-zinc-500 font-bold block uppercase tracking-widest mb-1">최종 생존 구역 스코어 챔피언</span>
-          <span id="finished-winner-zone-info" class="text-xl font-black text-[#00FFFF] neon-text-cyan">A ZONE</span>
-          <span id="finished-total-score-info" class="text-xs text-zinc-400 block mt-1">Surviving Agent Luck sum: -- P</span>
+          <span class="text-[9px] text-zinc-500 font-bold block uppercase tracking-widest mb-1">Final Winning Zone</span>
+          <span id="finished-winner-zone-info" class="text-xl font-black text-[#00FFFF] neon-text-cyan">ZONE A</span>
+          <span id="finished-total-score-info" class="text-xs text-zinc-400 block mt-1">Surviving players score sum: -- P</span>
         </div>
 
-        <div class="bg-zinc-900/30 p-3 rounded-2xl text-[10px] text-zinc-500">
-          호스트가 전체 리셋을 지시할 때까지 현 단말 상태를 보존해주길 권고합니다.
+        <div class="bg-zinc-900/30 p-3 rounded-2xl text-[10px] text-zinc-500 font-mono">
+          Please wait until the host resets the game server back to default lobby.
         </div>
       </div>
     </div>
@@ -371,7 +371,7 @@
 
   <!-- FOOTER -->
   <footer class="text-center font-mono text-[9px] text-zinc-650 pt-4 border-t border-zinc-900 w-full relative z-10 flex flex-col md:flex-row justify-between items-center gap-1.5">
-    <span>SYSTEM REGISTRY: CONNECTED</span>
+    <span>SYSTEM REGISTRY: SECURE CONNECTION</span>
     <span class="text-pink-500">○ ▲ ■ REALTIME PARTICIPATION PROTOCOL</span>
   </footer>
 
@@ -458,7 +458,7 @@
       });
     }
 
-    // Default structure initializer (useful during deep reset)
+    // Default structure initializer
     function initializeDatabaseStructure() {
       const defaultState = {
         currentRound: 0,
@@ -503,7 +503,7 @@
       if (selfExists && me) {
         idBadge.style.display = 'flex';
         document.getElementById('badge-card-num').innerText = '#' + (me.num < 10 ? '0' + me.num : me.num);
-        document.getElementById('badge-score').innerText = (me.score || 100) + ' P';
+        document.getElementById('badge-score').innerText = (me.score || 120) + ' P';
       } else {
         idBadge.style.display = 'none';
       }
@@ -556,7 +556,7 @@
           let survivorsInZone = Object.values(pList).filter(p => p.zone === z && p.id !== (state.ejected && state.ejected[z]));
           let totalScore = 0;
           survivorsInZone.forEach(p => {
-            totalScore += (p.num || 0); // Surviving Agent card ID sum score
+            totalScore += (p.score || 100); 
           });
           if (totalScore > bestScore) {
             bestScore = totalScore;
@@ -564,8 +564,8 @@
           }
         });
 
-        document.getElementById('finished-winner-zone-info').innerText = bestZone + ' 구역 (ZONE)';
-        document.getElementById('finished-total-score-info').innerText = '최종생존자 행운 카드 숫자 합계: ' + bestScore + ' 점';
+        document.getElementById('finished-winner-zone-info').innerText = 'ZONE ' + bestZone;
+        document.getElementById('finished-total-score-info').innerText = 'Surviving Zone Accumulated Score: ' + bestScore + ' P';
         return;
       }
 
@@ -575,20 +575,20 @@
           document.getElementById('screen-round-intro').style.display = 'block';
           document.getElementById('wait-round-title').innerText = 'ROUND ' + state.currentRound + ' BRIEFING';
           
-          let leaderNickname = '없음';
+          let leaderNickname = 'System Bot';
           if (zoneLeaderId) {
             const lObj = pList[zoneLeaderId];
-            leaderNickname = lObj ? lObj.nickname : '시스템 대리점';
+            leaderNickname = lObj ? lObj.nickname : 'System Bot';
           }
           document.getElementById('intro-zone-leader-name').innerText = leaderNickname;
           
           const introMeBadge = document.getElementById('intro-is-me-badge');
           if (isLeader) {
             introMeBadge.style.display = 'inline-block';
-            document.getElementById('wait-step-status').innerHTML = "축하합니다! 구역 팀장 위촉<br><span class='text-yellow-400 font-extrabold text-sm'>귀하가 해당 구역의 리더 👑 로 선발되었습니다.</span>";
+            document.getElementById('wait-step-status').innerHTML = "Elected Zone Leader 👑<br><span class='text-yellow-400 font-extrabold text-xs'>You represents the survival strategy of this zone!</span>";
           } else {
             introMeBadge.style.display = 'none';
-            document.getElementById('wait-step-status').innerText = '동맹 조정 및 브리핑 세트';
+            document.getElementById('wait-step-status').innerText = 'Preparing Next Strategy Step...';
           }
           break;
 
@@ -602,20 +602,20 @@
             const currentCast = (state.votes && state.votes[myZone]) || '';
             const indicator = document.getElementById('voted-status-indicator');
             if (currentCast) {
-              indicator.innerText = '인정 투표 제출 완료: [' + (currentCast === 'BLUE' ? '협력 BLUE 🔵' : '대립 RED 🔴') + ']';
+              indicator.innerText = 'VOTE SUBMITTED: [' + (currentCast === 'BLUE' ? 'COOPERATE BLUE 🔵' : 'DEFECT RED 🔴') + ']';
               indicator.className = "text-center py-2 bg-pink-950/30 rounded-xl border border-pink-500/30 text-xs font-bold text-pink-500 tracking-wider";
             } else {
-              indicator.innerText = '투표 선택 대기 중 (30초 제한)';
-              indicator.className = "text-center py-2 bg-zinc-900/50 rounded-xl border border-zinc-800 text-xs font-mono tracking-widest text-zinc-400";
+              indicator.innerText = 'VOTE ACTION REQUIRED (30s LIMIT)';
+              indicator.className = "text-center py-2 bg-amber-950/30 rounded-xl border border-amber-500/30 text-xs font-bold text-amber-500 tracking-wider animate-pulse";
             }
           } else {
             document.getElementById('voting-is-leader').style.display = 'none';
             document.getElementById('voting-is-member').style.display = 'block';
             
-            let lNickname = '대행 봇';
+            let lNickname = 'System Bot';
             if (zoneLeaderId) {
               const lObj = pList[zoneLeaderId];
-              lNickname = lObj ? lObj.nickname : '시스템 봇';
+              lNickname = lObj ? lObj.nickname : 'System Bot';
             }
             document.getElementById('member-target-leader-nickname').innerText = lNickname;
           }
@@ -637,13 +637,15 @@
               // Citizen of RED vote zone - standby
               document.getElementById('ejection-leader-pnl').style.display = 'none';
               document.getElementById('ejection-citizen-pnl').style.display = 'block';
+              document.getElementById('exile-citizen-title').innerText = "Exile Selection Underway ⚖️";
+              document.getElementById('exile-citizen-desc').innerText = "Your Zone Leader is choosing a member for exile as per the RED treaty. Watch your status closely!";
             }
           } else {
             // Zone voted BLUE - citizen/leader does not need to eject anyone! Sim standard standby
             document.getElementById('ejection-leader-pnl').style.display = 'none';
             document.getElementById('ejection-citizen-pnl').style.display = 'block';
-            document.getElementById('ejection-citizen-pnl').querySelector('h3').innerText = '구역 생존 협력 완료';
-            document.getElementById('ejection-citizen-pnl').querySelector('p').innerText = '소속 구역이 [BLUE]를 선택하여 무사히 방출 심사 단계가 유예되었습니다. 협동과 상생이 유지됩니다.';
+            document.getElementById('exile-citizen-title').innerText = 'Zone Solidarity Preserved';
+            document.getElementById('exile-citizen-desc').innerText = 'Your zone voted [BLUE]. The exile process has been suspended. Everyone in this zone survived safely!';
           }
           break;
 
@@ -656,14 +658,14 @@
           
           if (isEjected) {
             resultSymbol.innerText = '🌀';
-            outcomeDesc.innerHTML = "<span class='text-rose-500 font-extrabold'>방출 조치 발생!</span><br>아수라장에서 소속 조의 낙오 결사 지정에 의해 방출되어 다른 구역 구제소로 파견되었습니다.";
+            outcomeDesc.innerHTML = "<span class='text-rose-500 font-extrabold'>EXILE TRIGGERED!</span><br>You were nominated for ejection from your previous team and relocated to a safe haven zone.";
           } else {
             resultSymbol.innerText = '🛡️';
-            outcomeDesc.innerHTML = "<span class='text-[#00FF55] font-extrabold'>구역 방출 무사 생존!</span><br>위기를 견뎌내고 조를 사수했습니다! 생존 성과금으로 <span class='text-pink-400'>50 포인트</span>를 지급받습니다.";
+            outcomeDesc.innerHTML = "<span class='text-[#00FF55] font-extrabold'>SOLIDARITY SURVIVAL SAVED!</span><br>You kept your zone presence. Earned +50 bounty scorecard points for surviving!";
           }
           
-          document.getElementById('trade-my-new-zone').innerText = myZone + ' 구역';
-          document.getElementById('trade-my-score').innerText = (me.score || 100) + ' P';
+          document.getElementById('trade-my-new-zone').innerText = 'ZONE ' + myZone;
+          document.getElementById('trade-my-score').innerText = (me.score || 120) + ' P';
           break;
       }
     }
@@ -676,7 +678,7 @@
     function enrollParticipant() {
       const inputNick = document.getElementById('input-nickname');
       if (!inputNick || !inputNick.value.trim()) {
-        alert('조에서 불려질 유니크 닉네임을 적어주세요!');
+        alert('Please write a unique nickname to join the game!');
         return;
       }
       
@@ -696,7 +698,7 @@
         return (serialNum || 0) + 1;
       }, (error, committed, snapshot) => {
         if (error) {
-          alert('연결 에러가 발생했습니다. 다시 시도하십시오.');
+          alert('Network connection error. Try again.');
           return;
         }
         
@@ -737,7 +739,7 @@
       const membersInZone = Object.values(participants).filter(p => p.zone === zone && p.id !== myId);
       
       if (membersInZone.length === 0) {
-        container.innerHTML = "<div class='text-center text-xs text-zinc-500 py-4'>구역 내에 후보자가 존재하지 않습니다. (단독 잔존)</div>";
+        container.innerHTML = "<div class='text-center text-xs text-zinc-550 py-4'>No eligible zone targets located.</div>";
         document.getElementById('btn-confirm-eject').disabled = true;
         document.getElementById('btn-confirm-eject').className = "w-full py-4 rounded-xl text-xs font-black tracking-widest uppercase bg-zinc-800 text-zinc-500 cursor-not-allowed transition";
         return;
@@ -752,16 +754,16 @@
         
         btn.className = `w-full p-3.5 rounded-xl border flex items-center justify-between text-left transition-all ${
           isSelected 
-            ? 'border-[#FF007F] bg-pink-950/20 text-white font-extrabold shadow-[0_0_8px_rgba(255,0,127,0.3)]' 
-            : 'border-zinc-800 bg-zinc-900/40 text-zinc-400 hover:border-zinc-700'
+            ? 'border-[#FF007F] bg-pink-950/20 text-white font-extrabold shadow-[0_0_8px_rgba(255,0,127,0.3)] animate-pulse' 
+            : 'border-zinc-850 bg-zinc-900/40 text-zinc-400 hover:border-zinc-700'
         }`;
         
         btn.innerHTML = `
           <div class="flex items-center gap-2">
-            <span class="text-zinc-650 font-mono text-xs">#${p.num < 10 ? '0' + p.num : p.num}</span>
-            <span class="text-xs">${p.nickname}</span>
+            <span class="text-zinc-600 font-mono text-xs">#${p.num < 10 ? '0' + p.num : p.num}</span>
+            <span class="text-xs font-bold">${p.nickname}</span>
           </div>
-          <span class="text-[9px] uppercase px-1.5 py-0.5 rounded ${p.isBot ? 'bg-zinc-800 text-zinc-500' : 'bg-teal-950 text-teal-400 font-bold'}">${p.isBot ? 'SYSTEM BOT' : 'HUMAN'}</span>
+          <span class="text-[8px] uppercase px-1.5 py-0.5 rounded font-mono ${p.isBot ? 'bg-zinc-800 text-zinc-500' : 'bg-teal-950 text-teal-300 font-bold'}">${p.isBot ? 'SYSTEM BOT' : 'HUMAN'}</span>
         `;
         
         container.appendChild(btn);
@@ -798,7 +800,7 @@
 
     // Clear session and register a fresh account
     function clearLocalSession() {
-      if (confirm('확인 시 현재 대기 등록 정보가 파쇄되고 처음 게이트가 열립니다. 진행하겠습니까?')) {
+      if (confirm('Are you sure you want to delete your profile session? You will be unregistered.')) {
         if (myId) {
           gameRef.child('participants').child(myId).remove();
         }
